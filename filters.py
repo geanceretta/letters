@@ -12,7 +12,7 @@ Referencia:
 import matplotlib.pyplot as plt
 from skimage import filters, io, color, transform
 
-path = '/media/victor/1f3aa121-0188-42a3-b7c4-b271c3c0afca/2020 - 1/Processamento de imagens/datasets - processamento imagens/images_segmentation/2/04_122.png'
+path = '/media/victor/1f3aa121-0188-42a3-b7c4-b271c3c0afca/2020 - 1/Processamento de imagens/repositorio_github/letters/example_dataset/01_72.png'
 
 image = io.imread(path)
 image = color.rgb2gray(image)            # dtype('float64')
@@ -47,12 +47,12 @@ edge_sato_true_res = filters.sato(image_res, sigmas=range(1,6,1), black_ridges=T
 plt.figure()
 plt.imshow(image, cmap='gray')
 plt.title('Imagem - Greyscale')
-plt.savefig('Imagem - Greyscale')
+# plt.savefig('Imagem - Greyscale')
 
 plt.figure()
 plt.imshow(image_res, cmap='gray')
 plt.title('Imagem - Greyscale - Resized')
-plt.savefig('Imagem - Greyscale - Resized')
+# plt.savefig('Imagem - Greyscale - Resized')
 
 # Resultado dos filtros sem resize
 fig, axes = plt.subplots(ncols=3, nrows=2)
@@ -71,7 +71,7 @@ axes[1][2].set_title('Sato - True')
 # Ajusta o plot pra não sobrepor imagens
 plt.tight_layout()
 plt.show()
-plt.savefig('filtros sem resize')
+# plt.savefig('filtros sem resize')
 
 
 # Resultado dos filtros com resize
@@ -91,5 +91,5 @@ axes[1][2].set_title('Sato - True')
 # Ajusta o plot pra não sobrepor imagens
 plt.tight_layout()
 plt.show()
-plt.savefig('filtros com resize')
+# plt.savefig('filtros com resize')
 
