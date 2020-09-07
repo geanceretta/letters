@@ -12,7 +12,7 @@ Referencia:
 import matplotlib.pyplot as plt
 from skimage import filters, io, color, transform
 
-path = '/media/victor/1f3aa121-0188-42a3-b7c4-b271c3c0afca/2020 - 1/Processamento de imagens/repositorio_github/letters/example_dataset/01_72.png'
+path = '/media/victor/1f3aa121-0188-42a3-b7c4-b271c3c0afca/2020 - 1/Processamento de imagens/repositorio_github/letters/example_dataset/01_21.png'
 
 image = io.imread(path)
 image = color.rgb2gray(image)            # dtype('float64')
@@ -93,3 +93,17 @@ plt.tight_layout()
 plt.show()
 # plt.savefig('filtros com resize')
 
+
+
+
+# fig, ax = plt.subplots(nrows=2, ncols=2)
+
+# edges = filters.sobel(image_res)
+# # edges = filters.sobel(image)
+
+# low = 0.05
+# high = 0.6
+
+# lowt = (edges > low).astype(int)
+# hight = (edges > high).astype(int)
+# hyst = filters.apply_hysteresis_threshold(edges, low, high)
