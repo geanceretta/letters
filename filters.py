@@ -12,7 +12,7 @@ Referencia:
 import matplotlib.pyplot as plt
 from skimage import filters, io, color, transform
 
-path = '/media/victor/1f3aa121-0188-42a3-b7c4-b271c3c0afca/2020 - 1/Processamento de imagens/repositorio_github/letters/example_dataset/01_72.png'
+path = 'letters-dataset/letters/01_72.png'
 
 image = io.imread(path)
 image = color.rgb2gray(image)            # dtype('float64')
