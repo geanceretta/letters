@@ -20,6 +20,7 @@ image = (image * 255).astype('uint8')    # Converter para uint8
 
 # Resize da imagem
 image_res= transform.resize(image, (300,300))
+
 # image_res = (image_res * 255).astype('uint8')    # Converter para uint8
 
 # Filtros sem resize
@@ -30,8 +31,8 @@ edge_prewitt = filters.prewitt(image)
 edge_sato_false = filters.sato(image, sigmas=range(1,6,1), black_ridges=False)
 edge_sato_true= filters.sato(image, sigmas=range(1,6,1), black_ridges=True)
 
-# erro - perguntar Pablo
-edge_threshold_otsu = filters.threshold_otsu(image)
+## erro - perguntar Pablo
+# edge_threshold_otsu = filters.threshold_otsu(image)
 
 
 # Filtros com resize
