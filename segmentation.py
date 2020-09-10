@@ -14,9 +14,13 @@ from skimage import io, transform, color, exposure, filters
 from skimage.segmentation import active_contour
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
 from sklearn.cluster import KMeans
 from skimage import morphology
+from skimage.draw import line
+from skimage.feature import canny
 from skimage.morphology import dilation, diamond, square, erosion, disk
+from skimage.transform import probabilistic_hough_line
 import os
 
 
@@ -160,17 +164,63 @@ def hyst_threshold(image):
     plt.tight_layout()
     plt.savefig(maindir +'hyst_threshold_results/'+ dire)
     plt.close()
+
+
+def line_detection_mask(image):
+    original = image.copy()
+    image = color.rgb2gray(image) # dtype('float64')
+    image = (image * 255)
+    
+    # aumentar a exposição para reduzir ruidos do fundo
+    image = exposure.equalize_hist(image, nbins=2)
+    
+    # detector de bordas para otimizar a identificação das linhas. Foram feitos testes
+    # com o kmeans para este proposito porem hora ele selecionava o fundo, hora o caractere.
+    # Pela imprevisibilidade do kmeans, optou-se pelo canny que é mais estavel.
+    edges = canny(image, sigma=0.5)
+
+    # detector de linhas hough probabilistico
+    lines_reference = probabilistic_hough_line(edges, threshold=20, line_length=28, line_gap=8)
+
+    # array vazio onde as linhas serao desenhadas
+    drawed_lines = np.zeros_like(image, dtype=np.uint8)
+
+    # desenha as linhas baseado nos pontos de referencia retornados por hough
+    for single_line in lines_reference:
+        p0, p1 = single_line
+        row, column = line(p0[1], p0[0], p1[1], p1[0])
+        drawed_lines[row, column] = 1
+
+    # sobreposicao das linhas na imagem, necessita de um metodo melhor para conseguir apagar as
+    # linhas a partir da mascara
+    image[drawed_lines == 1] = 1
+
+    fig, axes = plt.subplots(1, 3, figsize=(15, 5), sharex=True, sharey=True)
+    ax = axes.ravel()
+
+    ax[0].imshow(original, cmap=cm.gray)
+    ax[0].set_title('Original image')
+
+    ax[1].imshow(edges, cmap=cm.gray)
+    ax[1].set_title('Canny edges')
+
+    ax[2].imshow(drawed_lines, cmap=cm.gray)
+    ax[2].set_title('Lines found on the image')
+
+    for a in ax:
+        a.set_axis_off()
+
+    plt.tight_layout()
+    plt.savefig(maindir +'line_detection_mask_results/'+ dire)
+    plt.close()
     
 
-
-
-
 ## Teste automatizado:
-maindir = '/media/victor/1f3aa121-0188-42a3-b7c4-b271c3c0afca/2020 - 1/Processamento de imagens/repositorio_github/letters/example_dataset/'
+maindir = './example_dataset/'
 files = os.listdir(maindir)
 
 ## Escolha do método a ser utilizado
-choose = 'hyst_threshold'
+choose = 'lines_mask'
 for dire in files:
     if dire.endswith('.png'):
         print(maindir + dire)
@@ -216,7 +266,11 @@ for dire in files:
         elif (choose == 'hyst_threshold'):
             im = io.imread(maindir + dire)
             im2 = transform.resize(im, (300,300))
-            hyst_threshold(im2)               
+            hyst_threshold(im2)
+        elif (choose == 'lines_mask'):
+            im = io.imread(maindir + dire)
+            line_detection_mask(im)
+
             
             
 # # ## Para testar apenas uma imagem:
