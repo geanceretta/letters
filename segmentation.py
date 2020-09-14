@@ -38,6 +38,7 @@ def kMeans(img):
 def ajusteManual(im, baixo, alto):
     im2 = im.copy()
     im2= transform.resize(im2, (300,300))
+    im2 = (im2 * 255).astype('uint8')
     im2[im2<=baixo] = 0
     im2[im2>=alto] = 255
 
@@ -220,21 +221,47 @@ maindir = './example_dataset/'
 files = os.listdir(maindir)
 
 ## Escolha do método a ser utilizado
-choose = 'lines_mask'
+choose = 'kmeans'
 for dire in files:
     if dire.endswith('.png'):
-        print(maindir + dire)
+        # print(maindir + dire)
         
         if (choose == 'kmeans'):
             im = io.imread(maindir + dire)
             im3 = transform.resize(im, (300,300))
             im4 = kMeans(im3)
+    
+            # Correção - Erro inversão de cores da máscara binária
+            solution = im4.copy()
+            lin, col = solution.shape
+            
+            zeros = 0
+            uns = 0
+            for i in range(lin):
+                for j in range(col):
+                    if(solution[i,j] == 255):
+                        uns = uns+1
+                    else:
+                        zeros = zeros+1
+            print(zeros)
+            print(uns)
+            if(zeros > uns):
+                print("okay - image:"+ dire)
+            else:
+                print("not okay - image:"+ dire)
+                solution[solution == 255] = 100
+                solution[solution == 0] = 255
+                solution[solution == 100] = 0
+            
+                        
+            
+            
             # im4 = (im4*255)
             plt.subplot(121)         
             plt.imshow(im, cmap="gray")
             plt.title("Imagem original")
             plt.subplot(122)
-            plt.imshow(im4, cmap="gray")
+            plt.imshow(solution, cmap="gray")
             plt.title("Resultado")
             plt.savefig(maindir +'kmean_based_results/'+ dire)
             plt.close()
@@ -248,7 +275,7 @@ for dire in files:
             im4 = exposure.equalize_hist(im3, nbins=3)
             im4 = color.rgb2gray(im4)
             im4 = (im4*255).astype('uint8')                      
-            im4 = ajusteManual(im4,120,130)
+            im4 = ajusteManual(im4,125,130)
             plt.subplot(121)
             plt.imshow(im, cmap="gray")
             plt.title("Imagem original")
