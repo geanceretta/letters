@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-maindir_treino = 'C:\\Users\\Pigozzo\\OneDrive\\UTFPR\\2020-1\\Processamento de Imagen\\T2\\Data2\\treino'
-maindir_teste = 'C:\\Users\\Pigozzo\\OneDrive\\UTFPR\\2020-1\\Processamento de Imagen\\T2\\Data2\\teste'
+maindir_treino = './Data2/treino'
+maindir_teste = './Data2/teste'
 lista_treino = []
 lista_teste = []
 train_images = np.zeros((387*5, 32, 32, 4))
@@ -84,12 +84,12 @@ model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
-history = model.fit(train_images, train_labels, epochs=50, 
+history = model.fit(train_images, train_labels, epochs=10, 
                     validation_data=(test_images, test_labels))
 
 plt.figure()
-plt.plot(history.history['acc'], label='accuracy')
-plt.plot(history.history['val_acc'], label = 'val_accurancy')
+plt.plot(history.history['accuracy'], label='accuracy')
+plt.plot(history.history['val_accuracy'], label = 'val_accurancy')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.ylim([0.5, 1])

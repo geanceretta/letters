@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-maindir_treino = 'C:\\Users\\Pigozzo\\OneDrive\\UTFPR\\2020-1\\Processamento de Imagen\\T2\\data\\treino'
-maindir_teste = 'C:\\Users\\Pigozzo\\OneDrive\\UTFPR\\2020-1\\Processamento de Imagen\\T2\\data\\teste'
+maindir_treino = './data/treino'
+maindir_teste = './data/teste'
 lista_treino = []
 lista_teste = []
 train_images = np.zeros((387*3, 32, 32, 4))
@@ -87,13 +87,13 @@ model.compile(optimizer='adam',
 history = model.fit(train_images, train_labels, epochs=50, 
                     validation_data=(test_images, test_labels))
 
-plt.figure()
-plt.plot(history.history['acc'], label='accuracy')
-plt.plot(history.history['val_acc'], label = 'val_accurancy')
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
-plt.ylim([0.5, 1])
-plt.legend(loc='lower right')
+# plt.figure()
+# plt.plot(history.history['acc'], label='accuracy')
+# plt.plot(history.history['val_acc'], label = 'val_accurancy')
+# plt.xlabel('Epoch')
+# plt.ylabel('Accuracy')
+# plt.ylim([0.5, 1])
+# plt.legend(loc='lower right')
 
 test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
 
