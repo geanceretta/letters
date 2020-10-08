@@ -7,11 +7,11 @@ from tensorflow.keras import layers, models
 import matplotlib.pyplot as plt
 import numpy as np
 
-
-maindir_treino = 'C:\\Users\\Pigozzo\\OneDrive\\UTFPR\\2020-1\\Processamento de Imagen\\T2\\Data2\\treino'
-maindir_teste = 'C:\\Users\\Pigozzo\\OneDrive\\UTFPR\\2020-1\\Processamento de Imagen\\T2\\Data2\\teste'
+maindir_treino = './Data2/treino'
+maindir_teste = './Data2/teste'
 lista_treino = []
 lista_teste = []
+class_names = ['a', 'b', 'c', 'e', 'k']
 train_images = np.zeros((387*5, 32, 32, 4))
 test_images = np.zeros((43*5, 32, 32, 4))
 train_labels = np.zeros((387*5, 1))
@@ -88,8 +88,8 @@ history = model.fit(train_images, train_labels, epochs=50,
                     validation_data=(test_images, test_labels))
 
 plt.figure()
-plt.plot(history.history['acc'], label='accuracy')
-plt.plot(history.history['val_acc'], label = 'val_accurancy')
+plt.plot(history.history['accuracy'], label='accuracy')
+plt.plot(history.history['val_accuracy'], label = 'val_accurancy')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.ylim([0.5, 1])
@@ -99,3 +99,25 @@ test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
 
 print(test_acc)
         
+#verificar acuracia por classe
+import numpy as np
+saidas = model.predict(test_images)
+labels_out = np.argmax(saidas, axis=1)
+pcts = []
+for classe in range(0,5):
+    indices = np.where(test_labels == classe)[0]
+    corretos = np.where(labels_out[indices] == classe)[0]
+    # print(labels_out[indices])
+    porcentagem = len(corretos) / len(indices)
+    pcts.append(porcentagem * 100)
+    
+print('Porcentagens')
+for i in range(0,5):
+    print('%s -> %.2f %%' %(class_names[i],pcts[i]))
+        
+    
+
+con_mat = tf.math.confusion_matrix(test_labels, labels_out)
+
+with tf.Session():
+   print('Confusion Matrix: \n\n', tf.Tensor.eval(con_mat,feed_dict=None, session=None))

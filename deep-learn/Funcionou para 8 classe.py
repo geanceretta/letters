@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-maindir_treino = 'C:\\Users\\Pigozzo\\OneDrive\\UTFPR\\2020-1\\Processamento de Imagen\\T2\\letters\\deep-learn\\Data3\\treino'
-maindir_teste = 'C:\\Users\\Pigozzo\\OneDrive\\UTFPR\\2020-1\\Processamento de Imagen\\T2\\letters\\deep-learn\\Data3\\teste'
+maindir_treino = './Data3/treino'
+maindir_teste = './Data3/teste'
 lista_treino = []
 lista_teste = []
 class_names = ['a', 'b', 'c', 'e', 'k', 'o', 'y', 'x']
@@ -101,8 +101,8 @@ history = model.fit(train_images, train_labels, epochs=50,
                     validation_data=(test_images, test_labels))
 
 plt.figure()
-plt.plot(history.history['acc'], label='accuracy')
-plt.plot(history.history['val_acc'], label = 'val_accurancy')
+plt.plot(history.history['accuracy'], label='accuracy')
+plt.plot(history.history['val_accuracy'], label = 'val_accurancy')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.ylim([0.5, 1])
